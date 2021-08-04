@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>Project: Tic-Tac-Toe</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Project: Tic-Tac-Toe</h1>
+    </header>
+    <main>
+      <div id="login-screen">
+        <div id="selections" >
+          <div class="player-selection">
+            <h3>Player One</h3>
+            <u><strong>Pick your color</strong></u>
+            <form>
+              <label>
+                <input
+                  type="radio"
+                  name="player-one-color"
+                  value="blue"
+                  checked
+                />
+                <div class="color-sample">Blue</div>
+              </label>
+              <label>
+                <input type="radio" name="player-one-color" value="green" />
+                <div class="color-sample">Green</div>
+              </label>
+              <label>
+                <input type="radio" name="player-one-color" value="red" />
+                <div class="color-sample">Red</div>
+              </label>
+              <label>
+                <input type="radio" name="player-one-color" value="yellow" />
+                <div class="color-sample">Yellow</div>
+              </label>
+              <input
+                type="text"
+                name="player-one-name"
+                placeholder="What is your name?"
+                value="Player One"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </form>
+          </div>
+          <div class="player-selection">
+            <h3>Player Two</h3>
+            <u><strong>Pick your color</strong></u>
+            <form>
+              <label>
+                <input type="radio" name="player-two-color" value="blue" />
+                <div class="color-sample">Blue</div>
+              </label>
+              <label>
+                <input type="radio" name="player-two-color" value="green" />
+                <div class="color-sample">Green</div>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="player-two-color"
+                  value="red"
+                  checked
+                />
+                <div class="color-sample">Red</div>
+              </label>
+              <label>
+                <input type="radio" name="player-two-color" value="yellow" />
+                <div class="color-sample">Yellow</div>
+              </label>
+              <input
+                type="text"
+                name="player-one-name"
+                placeholder="What is your name?"
+                value="Player Two"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </form>
+          </div>
+        </div>
+        <a id="start-button">Start</a>
+      </div>
+      <div id="game-display">
+        <div id="player-one-ingame" class="player-display">
+          <img src="blue.png" />
+          <div class="player-info"><span>Player One</span><br><u>You are X</u></div>
+          <div class="turn-info">Your turn</div>
+        </div>
+        <div id="game-grid-section">
+          <div id="game-grid">
+            <div class="game-square" id="_1-1"></div>
+            <div class="game-square" id="_1-2"></div>
+            <div class="game-square" id="_1-3"></div>
+            <div class="game-square" id="_2-1"></div>
+            <div class="game-square" id="_2-2"></div>
+            <div class="game-square" id="_2-3"></div>
+            <div class="game-square" id="_3-1"></div>
+            <div class="game-square" id="_3-2"></div>
+            <div class="game-square" id="_3-3"></div>
+          </div>
+        </div>
+        <div id="player-two-ingame" class="player-display">
+          <img src="red.png" />
+          <div class="player-info"><span>Player Two</span><br><u>You are O</u></div>
+          <div class="turn-info">Your turn</div>
+        </div>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
