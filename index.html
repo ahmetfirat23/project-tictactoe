@@ -81,7 +81,7 @@
             </form>
           </div>
         </div>
-        <a id="start-button">Start</a>
+        <a id="start-button" class="button">Start</a>
       </div>
       <div id="game-display">
         <div id="player-one-ingame" class="player-display">
@@ -91,21 +91,32 @@
         </div>
         <div id="game-grid-section">
           <div id="game-grid">
-            <div class="game-square" id="_1-1"></div>
-            <div class="game-square" id="_1-2"></div>
-            <div class="game-square" id="_1-3"></div>
-            <div class="game-square" id="_2-1"></div>
-            <div class="game-square" id="_2-2"></div>
-            <div class="game-square" id="_2-3"></div>
-            <div class="game-square" id="_3-1"></div>
-            <div class="game-square" id="_3-2"></div>
-            <div class="game-square" id="_3-3"></div>
+            <div class="game-square" id="_1-1">X</div>
+            <div class="game-square" id="_1-2">O</div>
+            <div class="game-square" id="_1-3">X</div>
+            <div class="game-square" id="_2-1">O</div>
+            <div class="game-square" id="_2-2">O</div>
+            <div class="game-square" id="_2-3">X</div>
+            <div class="game-square" id="_3-1">O</div>
+            <div class="game-square" id="_3-2">X</div>
+            <div class="game-square" id="_3-3">O</div>
           </div>
         </div>
         <div id="player-two-ingame" class="player-display">
           <img src="red.png" />
           <div class="player-info"><span>Player Two</span><br><u>You are O</u></div>
           <div class="turn-info">Your turn</div>
+        </div>
+      </div>
+      <div id="ending-screen">
+        <div id="winner-player">
+          <img src=""/>
+          <div id="winner-name"></div>
+          <div id="win-message">Wins!</div>          
+          </div>
+          <div id="buttons">
+            <div id="play-again-button" class="button">Play Again</div>
+            <div id="change-settings-button" class="button">Change Settings</div>
         </div>
       </div>
     </main>
