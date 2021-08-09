@@ -9,7 +9,7 @@
     </header>
     <main>
       <div id="login-screen">
-        <div id="selections" >
+        <div id="selections">
           <div class="player-selection">
             <h3>Player One</h3>
             <u><strong>Pick your color</strong></u>
@@ -78,6 +78,9 @@
                 autocomplete="off"
                 spellcheck="false"
               />
+              <label for="ai" style="font-size: 24px"
+                ><input type="checkbox" id="ai" name="ai" value="ai" />AI</label
+              >
             </form>
           </div>
         </div>
@@ -86,7 +89,9 @@
       <div id="game-display">
         <div id="player-one-ingame" class="player-display">
           <img src="blue.png" />
-          <div class="player-info"><span>Player One</span><br><u>You are X</u></div>
+          <div class="player-info">
+            <span>Player One</span><br /><u>You are X</u>
+          </div>
           <div class="turn-info">Your turn</div>
         </div>
         <div id="game-grid-section">
@@ -104,19 +109,21 @@
         </div>
         <div id="player-two-ingame" class="player-display">
           <img src="red.png" />
-          <div class="player-info"><span>Player Two</span><br><u>You are O</u></div>
+          <div class="player-info">
+            <span>Player Two</span><br /><u>You are O</u>
+          </div>
           <div class="turn-info">Your turn</div>
         </div>
       </div>
       <div id="ending-screen">
         <div id="winner-player">
-          <img src=""/>
+          <img src="" />
           <div id="winner-name"></div>
-          <div id="win-message">Wins!</div>          
-          </div>
-          <div id="buttons">
-            <div id="play-again-button" class="button">Play Again</div>
-            <div id="change-settings-button" class="button">Change Settings</div>
+          <div id="win-message">Wins!</div>
+        </div>
+        <div id="buttons">
+          <div id="play-again-button" class="button">Play Again</div>
+          <div id="change-settings-button" class="button">Change Settings</div>
         </div>
       </div>
     </main>

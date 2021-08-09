@@ -1,8 +1,4 @@
 const Player = (sign, color, name) => {
-  this.name = name;
-  this.color = color;
-  this.sign = sign;
-
   let moves = [
     [0, 0, 0],
     [0, 0, 0],
@@ -25,6 +21,144 @@ const Player = (sign, color, name) => {
       [0, 0, 0],
       [0, 0, 0],
     ];
+  }
+
+  return { name, color, sign, makeMove, resetMoves };
+};
+
+const Computer = (sign, color, name) => {
+  let moves = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
+  let moveCount = 0;
+
+  function makeMove(board, otherPlayer) {
+    let moveInfo = findBestMove(board, playerMaximizer);
+    moves[moveInfo[0]][moveInfo[1]] = 1;
+    displayController.showTurnInfo(otherPlayer);
+    moveCount++;
+    return [moves, moveInfo];
+  }
+
+  function resetMoves() {
+    moves = [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ];
+  }
+
+  const playerMaximizer = sign == "X" ? true : false;
+
+  function isMoveLeft(board) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function evaluate(board) {
+    for (let row = 0; row < 3; row++) {
+      if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
+        if (board[row][0] == "X") {
+          return 10;
+        } else if (board[row][0] == "O") {
+          return -10;
+        }
+      }
+    }
+
+    for (let column = 0; column < 3; column++) {
+      if (
+        board[0][column] == board[1][column] &&
+        board[1][column] == board[2][column]
+      ) {
+        if (board[0][column] == "X") {
+          return 10;
+        } else if (board[0][column] == "O") {
+          return -10;
+        }
+      }
+    }
+
+    if (
+      (board[0][0] == board[1][1] && board[1][1] == board[2][2]) ||
+      (board[0][2] && board[1][1] && board[1][1] == board[2][0])
+    ) {
+      if (board[1][1] == "X") {
+        return 10;
+      } else if (board[1][1] == "O") {
+        return -10;
+      }
+    }
+
+    return 0;
+  }
+
+  function minimax(board, depth, isMaximizer) {
+    let score = evaluate(board);
+    if (score == 10 || score == -10) {
+      return score;
+    }
+    if (isMoveLeft(board) == false) {
+      return 0;
+    }
+    if (isMaximizer) {
+      let best = -1000;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (board[i][j] == 0) {
+            board[i][j] = "X";
+            best = Math.max(best, minimax(board, depth + 1, false));
+            board[i][j] = 0;
+          }
+        }
+      }
+      best -= depth;
+      return best;
+    } else {
+      let best = 1000;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (board[i][j] == 0) {
+            board[i][j] = "O";
+            best = Math.min(best, minimax(board, depth + 1, true));
+            board[i][j] = 0;
+          }
+        }
+      }
+      best += depth;
+      return best;
+    }
+  }
+
+  function findBestMove(board, playerMaximizer) {
+    let bestValue = playerMaximizer ? -1000 : +1000;
+    let bestMove = [-1, -1];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == 0) {
+          board[i][j] = sign;
+          let moveValue = minimax(board, 0, playerMaximizer);
+          board[i][j] = 0;
+          if (
+            (playerMaximizer && moveValue > bestValue) ||
+            (!playerMaximizer && moveValue < bestValue)
+          ) {
+            bestMove[0] = i;
+            bestMove[1] = j;
+            bestValue = moveValue;
+          }
+        }
+      }
+    }
+    return bestMove;
   }
 
   return { name, color, sign, makeMove, resetMoves };
@@ -77,8 +211,8 @@ const GameController = () => {
     "input[type='radio']"
   );
 
-  const playerOne = Player("X", "blue");
-  const playerTwo = Player("O", "red");
+  let playerOne = Player("X", "blue");
+  let playerTwo = Player("O", "red");
 
   let boardArray;
   let moveInfo;
@@ -86,6 +220,9 @@ const GameController = () => {
 
   let currentPlayer;
   let otherPlayer;
+  let AI;
+
+  let playerOneMoved = false;
 
   function start() {
     document
@@ -97,7 +234,7 @@ const GameController = () => {
     document
       .querySelector("#change-settings-button")
       .addEventListener("click", () => {
-        window.location.reload(false);
+        window.location.reload();
       });
     document
       .querySelector("#play-again-button")
@@ -117,6 +254,10 @@ const GameController = () => {
   }
 
   function onStartClick() {
+    AI = document.querySelector("#ai").checked;
+    if (AI) {
+      playerTwo = Computer("O", playerTwo.color);
+    }
     namePlayers();
     displayController.showGame(playerOne, playerTwo);
     displayController.showTurnInfo(playerOne);
@@ -146,22 +287,69 @@ const GameController = () => {
   function onBoardClick(event) {
     moveInfo = getMoveInfo(event.target);
     if (boardArray[moveInfo[0]][moveInfo[1]] == 0) {
-      boardArray[moveInfo[0]][moveInfo[1]] = 1;
+      boardArray[moveInfo[0]][moveInfo[1]] = currentPlayer.sign;
       currentArray = currentPlayer.makeMove(moveInfo, otherPlayer);
       displayController.displayMove(event.target.id, currentPlayer);
       if (victoryCheck(currentArray)) {
         endGame(currentPlayer);
         return;
       } else if (
-        boardArray.every((array) => array.every((number) => number == 1))
+        boardArray.every((array) => array.every((boardSign) => boardSign != 0))
       ) {
         drawEndGame();
         return;
       }
-      console.log(boardArray);
       nextPlayer();
+
+      if (AI && currentPlayer == playerTwo) {
+        let aiInfo = playerTwo.makeMove(boardArray, otherPlayer);
+        currentArray = aiInfo[0];
+        moveInfo = aiInfo[1];
+        boardArray[moveInfo[0]][moveInfo[1]] = currentPlayer.sign;
+        displayController.displayMove(
+          "_" + (moveInfo[0] + 1) + "-" + (moveInfo[1] + 1),
+          currentPlayer
+        );
+        if (victoryCheck(currentArray)) {
+          endGame(currentPlayer);
+          return;
+        } else if (
+          boardArray.every((array) =>
+            array.every((boardSign) => boardSign == currentPlayer.sign)
+          )
+        ) {
+          drawEndGame();
+          return;
+        }
+        nextPlayer();
+      }
     }
   }
+
+  /*function aiRandomMove() {
+    let i = Math.floor(Math.random() * 3);
+    let j = Math.floor(Math.random() * 3);
+    while (boardArray[i][j] != 0) {
+      i = Math.floor(Math.random() * 3);
+      j = Math.floor(Math.random() * 3);
+    }
+    moveInfo = [i, j];
+    boardArray[moveInfo[0]][moveInfo[1]] = currentPlayer.sign;
+    currentArray = currentPlayer.makeMove(moveInfo, otherPlayer);
+    displayController.displayMove("_" + (i + 1) + "-" + (j + 1), currentPlayer);
+    if (victoryCheck(currentArray)) {
+      endGame(currentPlayer);
+      return;
+    } else if (
+      boardArray.every((array) =>
+        array.every((boardSign) => boardSign == currentPlayer.sign)
+      )
+    ) {
+      drawEndGame();
+      return;
+    }
+    nextPlayer();
+  }*/
 
   function nextPlayer() {
     let temp = currentPlayer;
@@ -255,7 +443,6 @@ const displayController = (() => {
     if (player.sign == "X") {
       playerOneIngame.lastElementChild.style.visibility = "visible";
       playerTwoIngame.lastElementChild.style.visibility = "hidden";
-      console.log();
     } else {
       playerOneIngame.lastElementChild.style.visibility = "hidden";
       playerTwoIngame.lastElementChild.style.visibility = "visible";
@@ -288,7 +475,7 @@ const displayController = (() => {
     document.querySelector("#ending-screen").style.display = "flex";
     document.querySelector("#win-message").textContent = "It's a draw!";
     document.querySelector("#win-message").style.fontSize = 108;
-    document.querySelector("#winner-player img").setAttribute("src","");
+    document.querySelector("#winner-player img").setAttribute("src", "");
     document.querySelector("#winner-name").textContent = "";
   };
 
